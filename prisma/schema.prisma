@@ -24,18 +24,88 @@ model Program {
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
   Event       Event[]
+
+  @@map("programs")
 }
 
 model Event {
+  id           String    @id @default(cuid())
+  programId    String
+  jenisEventId String?
+  name         String
+  description  String?
+  startDate    DateTime
+  endDate      DateTime
+  harga        Int?
+  tempat       String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  program    Program     @relation(fields: [programId], references: [id])
+  JenisEvent JenisEvent? @relation(fields: [jenisEventId], references: [id])
+  Notulensi  Notulensi[]
+  Peserta    Peserta[]
+  Panitia    Panitia[]
+
+  @@map("events")
+}
+
+model JenisEvent {
+  id        String    @id @default(cuid())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  Event Event[]
+
+  @@map("jenis_events")
+}
+
+model Notulensi {
   id          String    @id @default(cuid())
-  programId   String
+  eventId     String
   name        String
   description String?
-  startDate   DateTime
-  endDate     DateTime
+  file        String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
 
-  program Program @relation(fields: [programId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+
+  @@map("notulensi")
+}
+
+model Peserta {
+  id        String    @id @default(cuid())
+  eventId   String
+  name      String
+  email     String?
+  phone     String?
+  status    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  event Event @relation(fields: [eventId], references: [id])
+
+  @@map("peserta")
+}
+
+model Panitia {
+  id        String    @id @default(cuid())
+  eventId   String
+  name      String
+  email     String?
+  phone     String?
+  status    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  event Event @relation(fields: [eventId], references: [id])
+
+  @@map("panitia")
 }
