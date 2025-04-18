@@ -1,4 +1,4 @@
-## Server SPMI
+## Server Sertifikasi
 
 ## Runing in Development
 1. **Open Terminal**: Go to your directory and open your terminal
