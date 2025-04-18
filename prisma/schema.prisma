@@ -14,16 +14,19 @@ datasource db {
 }
 
 model Program {
-  id          String    @id @default(cuid())
+  id          String      @id @default(cuid())
   name        String
   description String?
   status      String?
   startDate   DateTime
   endDate     DateTime
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   deletedAt   DateTime?
   Event       Event[]
+  Notulensi   Notulensi[]
+  Peserta     Peserta[]
+  Panitia     Panitia[]
 
   @@map("programs")
 }
@@ -44,9 +47,6 @@ model Event {
 
   program    Program     @relation(fields: [programId], references: [id])
   JenisEvent JenisEvent? @relation(fields: [jenisEventId], references: [id])
-  Notulensi  Notulensi[]
-  Peserta    Peserta[]
-  Panitia    Panitia[]
 
   @@map("events")
 }
@@ -65,22 +65,23 @@ model JenisEvent {
 
 model Notulensi {
   id          String    @id @default(cuid())
-  eventId     String
+  programId   String?
   name        String
+  tanggal     DateTime
   description String?
-  file        String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
 
-  event Event @relation(fields: [eventId], references: [id])
+  Program Program? @relation(fields: [programId], references: [id])
+  File    File[]
 
   @@map("notulensi")
 }
 
 model Peserta {
   id        String    @id @default(cuid())
-  eventId   String
+  programId String?
   name      String
   email     String?
   phone     String?
@@ -89,14 +90,14 @@ model Peserta {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  event Event @relation(fields: [eventId], references: [id])
+  Program Program? @relation(fields: [programId], references: [id])
 
   @@map("peserta")
 }
 
 model Panitia {
   id        String    @id @default(cuid())
-  eventId   String
+  programId String?
   name      String
   email     String?
   phone     String?
@@ -105,7 +106,27 @@ model Panitia {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  event Event @relation(fields: [eventId], references: [id])
+  Program Program? @relation(fields: [programId], references: [id])
 
   @@map("panitia")
+}
+
+model File {
+  id           String     @id @default(cuid())
+  filename     String
+  originalName String
+  path         String
+  mimetype     String
+  size         Int
+  extension    String
+  description  String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  deletedAt    DateTime?
+
+  notulensiId  String?
+  notulensi    Notulensi? @relation(fields: [notulensiId], references: [id])
+
+  @@index([filename])
+  @@index([createdAt])
 }
