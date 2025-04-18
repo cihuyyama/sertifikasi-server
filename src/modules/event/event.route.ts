@@ -1,24 +1,24 @@
 import { FastifyInstance } from "fastify";
-import { createProgramHandler, deleteProgramHandler, getAllProgramsHandler, getProgramByIdHandler, updateProgramHandler } from "./program.controller";
-import { $ref } from "./program.schema";
+import { $ref } from "./event.schema";
+import { createEventHandler, deleteEventHandler, getAllEventsHandler, getEventByIdHandler, updateEventHandler } from "./event.controller";
 
-async function programRoutes(server: FastifyInstance) {
+async function eventRoutes(server: FastifyInstance) {
     server.post(
         "/",
         {
             schema: {
-                tags: ["Program"],
-                body: $ref("createProgramSchema"),
+                tags: ["Event"],
+                body: $ref("createEventSchema"),
             },
         },
-        createProgramHandler
+        createEventHandler
     )
 
     server.get(
         "/",
         {
             schema: {
-                tags: ["Program"],
+                tags: ["Event"],
                 querystring: {
                     type: "object",
                     properties: {
@@ -27,14 +27,14 @@ async function programRoutes(server: FastifyInstance) {
                 },
             },
         },
-        getAllProgramsHandler
+        getAllEventsHandler
     )
 
     server.get(
         "/:id",
         {
             schema: {
-                tags: ["Program"],
+                tags: ["Event"],
                 params: {
                     type: "object",
                     properties: {
@@ -43,31 +43,31 @@ async function programRoutes(server: FastifyInstance) {
                 },
             },
         },
-        getProgramByIdHandler
+        getEventByIdHandler
     )
 
     server.put(
         "/:id",
         {
             schema: {
-                tags: ["Program"],
+                tags: ["Event"],
                 params: {
                     type: "object",
                     properties: {
                         id: { type: "string" },
                     },
                 },
-                body: $ref("createProgramSchema"),
+                body: $ref("createEventSchema"),
             },
         },
-        updateProgramHandler
+        updateEventHandler
     )
 
     server.delete(
         "/:id",
         {
             schema: {
-                tags: ["Program"],
+                tags: ["Event"],
                 params: {
                     type: "object",
                     properties: {
@@ -76,8 +76,8 @@ async function programRoutes(server: FastifyInstance) {
                 },
             },
         },
-        deleteProgramHandler
+        deleteEventHandler
     )
 }
 
-export default programRoutes;
+export default eventRoutes;

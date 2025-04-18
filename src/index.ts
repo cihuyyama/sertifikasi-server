@@ -29,7 +29,6 @@ server.register(import("@fastify/swagger"), {
 server.register(import("@fastify/swagger-ui"), {
     routePrefix: "/docs",
     uiConfig: {
-        docExpansion: "full",
         deepLinking: false,
     },
     uiHooks: {

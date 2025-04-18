@@ -1,20 +1,20 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateProgramInput } from "./program.schema";
-import ProgramService from "./program.service";
-import { errorFilter } from "../../middlewares/error-handling";
+import { FastifyReply, FastifyRequest } from "fastify"
+import { CreateEvent } from "./event.schema"
+import EventService from "./event.service"
+import { errorFilter } from "../../middlewares/error-handling"
 
-export async function createProgramHandler(
+export async function createEventHandler(
     request: FastifyRequest<{
-        Body: CreateProgramInput
+        Body: CreateEvent
     }>,
     reply: FastifyReply
 ) {
     try {
-        const program = await ProgramService.createProgram(request.body)
+        const event = await EventService.createEvent(request.body)
 
         reply.send({
-            data: program,
-            message: "Program created successfully",
+            data: event,
+            message: "Event created successfully",
             status: 201,
         })
     } catch (error) {
@@ -22,7 +22,7 @@ export async function createProgramHandler(
     }
 }
 
-export async function getAllProgramsHandler(
+export async function getAllEventsHandler(
     request: FastifyRequest<{
         Querystring: {
             name?: string
@@ -33,11 +33,11 @@ export async function getAllProgramsHandler(
     try {
         const { name } = request.query
 
-        const programs = await ProgramService.getAllPrograms(name)
+        const events = await EventService.getAllEvents(name)
 
         reply.send({
-            data: programs,
-            message: "Programs fetched successfully",
+            data: events,
+            message: "Events fetched successfully",
             status: 200,
         })
     } catch (error) {
@@ -45,7 +45,7 @@ export async function getAllProgramsHandler(
     }
 }
 
-export async function getProgramByIdHandler(
+export async function getEventByIdHandler(
     request: FastifyRequest<{
         Params: {
             id: string
@@ -56,11 +56,11 @@ export async function getProgramByIdHandler(
     try {
         const { id } = request.params
 
-        const program = await ProgramService.getProgramById(id)
+        const event = await EventService.getEventById(id)
 
         reply.send({
-            data: program,
-            message: "Program fetched successfully",
+            data: event,
+            message: "Event fetched successfully",
             status: 200,
         })
     } catch (error) {
@@ -68,23 +68,23 @@ export async function getProgramByIdHandler(
     }
 }
 
-export async function updateProgramHandler(
+export async function updateEventHandler(
     request: FastifyRequest<{
         Params: {
             id: string
         }
-        Body: CreateProgramInput
+        Body: CreateEvent
     }>,
     reply: FastifyReply
 ) {
     try {
         const { id } = request.params
 
-        const program = await ProgramService.updateProgram(id, request.body)
+        const event = await EventService.updateEvent(id, request.body)
 
         reply.send({
-            data: program,
-            message: "Program updated successfully",
+            data: event,
+            message: "Event updated successfully",
             status: 200,
         })
     } catch (error) {
@@ -92,7 +92,7 @@ export async function updateProgramHandler(
     }
 }
 
-export async function deleteProgramHandler(
+export async function deleteEventHandler(
     request: FastifyRequest<{
         Params: {
             id: string
@@ -103,11 +103,10 @@ export async function deleteProgramHandler(
     try {
         const { id } = request.params
 
-        const program = await ProgramService.deleteProgram(id)
+        await EventService.deleteEvent(id)
 
         reply.send({
-            data: program,
-            message: "Program deleted successfully",
+            message: "Event deleted successfully",
             status: 200,
         })
     } catch (error) {
