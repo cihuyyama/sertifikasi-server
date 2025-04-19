@@ -5,8 +5,11 @@ import fastifyJwt from "@fastify/jwt";
 import { UserPayload } from "./global";
 import fCookie from '@fastify/cookie'
 import { serverRoutes } from "./routes";
+import fastifyMultipart from "@fastify/multipart";
 
-const server = fastify()
+const server = fastify({
+    bodyLimit: 10485760, // 10MB
+})
 
 server.register(import("@fastify/swagger"), {
     swagger: {
@@ -91,6 +94,13 @@ server.addHook('preHandler', (req, res, next) => {
 server.register(fCookie, {
     secret: process.env.COOKIE_SECRET || 'supersecret',
     hook: 'preHandler',
+})
+
+server.register(fastifyMultipart, {
+    attachFieldsToBody: true,
+    limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB
+    }
 })
 
 server.get('/', async (request, reply) => {
