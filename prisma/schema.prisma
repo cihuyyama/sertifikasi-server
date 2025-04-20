@@ -91,15 +91,22 @@ model Notulensi {
 }
 
 model Peserta {
-  id        String    @id @default(cuid())
-  programId String?
-  name      String
-  email     String
-  phone     String?
-  status    String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  id                   String    @id @default(cuid())
+  programId            String?
+  provider             String   @default("google")
+  providerId           String?
+  nim                  String?
+  name                 String
+  email                String    @unique
+  phone                String?
+  sertifikasiTerdaftar String?   @map("sertifikasi_terdaftar")
+  status               String?
+  balance              Int?      @default(0)
+  sertifikat           File?
+  picture              String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  deletedAt            DateTime?
 
   Program Program? @relation(fields: [programId], references: [id], onDelete: Cascade)
 
@@ -136,7 +143,9 @@ model File {
   deletedAt    DateTime?
 
   notulensiId String?
+  pesertaId   String?    @unique
   notulensi   Notulensi? @relation(fields: [notulensiId], references: [id], onDelete: Cascade)
+  Peserta     Peserta?   @relation(fields: [pesertaId], references: [id])
 
   @@index([filename])
   @@index([createdAt])

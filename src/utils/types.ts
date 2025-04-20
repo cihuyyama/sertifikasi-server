@@ -14,3 +14,13 @@ export type FileEntries = {
     size: number;
     extension: any;
 }
+
+export type GoogleOauth2Response = {
+    id: string
+    email: string
+    verified_email: boolean
+    name: string
+    given_name: string
+    family_name: string
+    picture: string
+}
