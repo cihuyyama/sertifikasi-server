@@ -6,8 +6,10 @@ import eventRoutes from "./modules/event/event.route";
 import { notulensiSchemas } from "./modules/notulensi/notulensi.schema";
 import notulensiRoutes from "./modules/notulensi/notulensi.route";
 import { userSchemas } from "./modules/user/user.schema";
-import { authRoutes, userRoutes } from "./modules/user/use.route";
+import { authRoutes, userRoutes } from "./modules/user/user.route";
 import { googleOAuth2Routes } from "./modules/oauth2/google/google.route";
+import { pesertaSchemas } from "./modules/peserta/peserta.schema";
+import pesertaRoutes from "./modules/peserta/peserta.route";
 
 export async function serverRoutes(app: FastifyInstance) {
     for (const schema of [
@@ -15,6 +17,7 @@ export async function serverRoutes(app: FastifyInstance) {
         ...eventSchemas,
         ...notulensiSchemas,
         ...userSchemas,
+        ...pesertaSchemas,
     ]) {
         app.addSchema(schema)
     }
@@ -29,4 +32,5 @@ export async function serverRoutes(app: FastifyInstance) {
     app.register(programRoutes, { prefix: 'api/v1/programs' })
     app.register(eventRoutes, { prefix: 'api/v1/events' })
     app.register(notulensiRoutes, { prefix: 'api/v1/notulensi' })
+    app.register(pesertaRoutes, { prefix: 'api/v1/peserta' })
 }

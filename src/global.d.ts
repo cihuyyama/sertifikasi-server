@@ -1,4 +1,5 @@
 import { JWT } from '@fastify/jwt'
+import { Role } from './utils/types';
 
 declare module 'fastify' {
     interface FastifyRequest {
@@ -14,6 +15,7 @@ export type UserPayload = {
     id: string
     username: string
     email?: string
+    role: Role
     google_access_token?: string
     picture?: string
 }

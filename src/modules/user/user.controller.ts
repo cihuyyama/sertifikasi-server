@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify"
 import { ChangePasswordInput, CreateUserInput } from "./user.schema"
 import UserService from "./user.service"
 import { errorFilter } from "../../middlewares/error-handling"
+import { Role } from "../../utils/types"
 
 export async function registerUserHandler(
     request: FastifyRequest<{
@@ -31,9 +32,15 @@ export async function loginUserHandler(
     try {
         const payload = await UserService.Login(request.body)
 
-        const token = request.jwt.sign(payload, {
-            expiresIn: 1000 * 60 * 60 * 24 * 7, // 7 days
-        })
+        const token = request.jwt.sign(
+            {
+                ...payload,
+                role: 'admin',
+            },
+            {
+                expiresIn: 1000 * 60 * 60 * 24 * 7, // 7 days
+            }
+        )
 
         reply.setCookie("access_token", token, {
             path: "/",
@@ -122,6 +129,15 @@ export async function getUserByTokenHandler(
     reply: FastifyReply
 ) {
     try {
+        if (request.user.role !== Role.ADMIN) {
+            reply.status(403).send({
+                message: "Forbidden",
+                status: 403,
+            })
+            return
+        } 
+
+        
         const user = await UserService.GetUserById(request.user.id)
 
         reply.send({

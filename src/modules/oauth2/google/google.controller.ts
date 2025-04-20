@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import GoogleOAuth2Service from "./google.service";
+import { Role } from "../../../utils/types";
 
 export async function googleLoginHandler(
     request: FastifyRequest,
@@ -21,7 +22,8 @@ export async function googleLoginHandler(
         username: userData.name,
         email: userData.email,
         picture: userData.picture || undefined,
-        google_access_token: result.access_token
+        google_access_token: result.access_token,
+        role: Role.PESERTA
     }
     
     const token = request.jwt.sign(pesertaPayload, {

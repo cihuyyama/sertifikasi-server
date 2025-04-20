@@ -24,3 +24,8 @@ export type GoogleOauth2Response = {
     family_name: string
     picture: string
 }
+
+export enum Role {
+    ADMIN = 'admin',
+    PESERTA = 'peserta',
+}
