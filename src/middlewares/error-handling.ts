@@ -27,6 +27,17 @@ export const errorFilter = (e: unknown, res: FastifyReply) => {
         errors: "data already exists",
       });
     }
+    if (e.code === "P2025") {
+      return res.code(400).send({
+        errors: "Record to delete does not exist.",
+        model: e.meta?.modelName,
+      });
+    }
+    return res.code(400).send({
+      errors: e.meta?.cause || e.message || "Unkwon Prisma Client Error",
+      model: e.meta?.modelName,
+      code: e.code,
+    })
   } else {
     return res.code(500).send(e);
   }

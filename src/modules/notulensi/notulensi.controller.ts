@@ -151,9 +151,10 @@ export async function deleteNotulensiHandler(
     try {
         const { id } = request.params
 
-        await NotulensiService.deleteNotulensi(id)
+        const notulensi = await NotulensiService.deleteNotulensi(id)
 
         reply.send({
+            data: [],
             message: "Notulensi deleted successfully",
             status: 200,
         })

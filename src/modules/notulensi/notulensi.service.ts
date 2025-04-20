@@ -19,7 +19,7 @@ class NotulensiService {
 
         for (const file of filesArray) {
             // Process file
-            const uploadDir = path.join(__dirname, `../../public/notulensi`)
+            const uploadDir = path.join(__dirname, `../../../public/notulensi`)
             if (!fs.existsSync(uploadDir)) {
                 fs.mkdirSync(uploadDir, { recursive: true })
             }
@@ -64,7 +64,7 @@ class NotulensiService {
 
         for (const file of filesArray) {
             // Process file
-            const uploadDir = path.join(__dirname, `../../public/notulensi`)
+            const uploadDir = path.join(__dirname, `../../../public/notulensi`)
             if (!fs.existsSync(uploadDir)) {
                 fs.mkdirSync(uploadDir, { recursive: true })
             }
@@ -107,7 +107,7 @@ class NotulensiService {
             throw new Error('File not found')
         }
 
-        const filePath = path.join(__dirname, '../../public/notulensi', file.filename)
+        const filePath = path.join(__dirname, '../../../public/notulensi', file.filename)
 
         return {
             file,
@@ -139,12 +139,19 @@ class NotulensiService {
     }
 
     static async deleteNotulensi(id: string) {
-        const notulensi = await NotulensiRepository.Delete(id);
+        const notulensi = await NotulensiRepository.FindById(id);
         if (!notulensi) {
             throw new Error("Notulensi not found");
         }
 
-        return notulensi;
+        if(notulensi.File.length > 0) {
+            for (const file of notulensi.File) {
+                await this.deleteNotulensiDoc(file.id);
+            }
+        }
+
+        return NotulensiRepository.Delete(id);
+
     }
 
     static async deleteNotulensiDoc(id: string) {
@@ -152,7 +159,7 @@ class NotulensiService {
             const fileRecord = await NotulensiRepository.FindNotulensiDokumen(id);
 
             if (fileRecord) {
-                const filePath = path.join(__dirname, '../../public/notulensi', fileRecord.filename);
+                const filePath = path.join(__dirname, '../../../public/notulensi', fileRecord.filename);
 
                 await fs.promises.unlink(filePath);
 
