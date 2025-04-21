@@ -4,7 +4,14 @@ import { CreatePesertaInput } from "./peserta.schema";
 class PesertaRepository {
     static async Insert(data: CreatePesertaInput) {
         const peserta = await db.peserta.create({
-            data
+            data: {
+                ...data,
+                Event: {
+                    connect: {
+                        id: data.eventId,
+                    }
+                },
+            },
         })
 
         return peserta;
@@ -15,8 +22,22 @@ class PesertaRepository {
             where: {
                 id,
             },
-            update: data,
-            create: data,
+            update: {
+                ...data,
+                Event: {
+                    connect: {
+                        id: data.eventId,
+                    }
+                }
+            },
+            create: {
+                ...data,
+                Event: {
+                    connect: {
+                        id: data.eventId,
+                    }
+                }
+            },
         })
 
         return peserta;
@@ -26,13 +47,17 @@ class PesertaRepository {
         search?: string,
         sertifikasi?: string,
         status?: string,
-        programId?: string,
+        eventId?: string,
     ) {
         const peserta = await db.peserta.findMany({
             where: {
                 sertifikasiTerdaftar: sertifikasi,
                 status: status,
-                programId: programId,
+                Event: {
+                    some: {
+                        id: eventId,
+                    }
+                },
                 OR: [
                     {
                         name: {
@@ -55,7 +80,7 @@ class PesertaRepository {
                 createdAt: "desc",
             },
             include: {
-                Program: true,
+                Event: true,
                 sertifikat: true,
             },
         })
@@ -79,7 +104,7 @@ class PesertaRepository {
                 id,
             },
             include: {
-                Program: true,
+                Event: true,
                 sertifikat: true,
             }
         })

@@ -12,7 +12,7 @@ const createPesertaSchema = z.object({
         required_error: "Phone number is required",
     }).optional(),
     nim: z.string().optional(),
-    programId: z.string().optional(),
+    eventId: z.string().optional(),
     status: z.string().optional(),
     balance: z.number().optional(),
     sertifikasiTerdaftar: z.string().optional(),

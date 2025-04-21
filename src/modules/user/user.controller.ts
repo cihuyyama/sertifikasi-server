@@ -65,7 +65,6 @@ export async function logoutUserHandler(
     request: FastifyRequest,
     reply: FastifyReply
 ) {
-    console.log(request.user.GoogleToken)
     const token = request.user.GoogleToken
     if (token) {
         await fetch('https://accounts.google.com/o/oauth2/revoke?token=' + token?.access_token, {

@@ -36,7 +36,6 @@ model Program {
   deletedAt   DateTime?
   Event       Event[]
   Notulensi   Notulensi[]
-  Peserta     Peserta[]
   Panitia     Panitia[]
 
   @@map("programs")
@@ -55,6 +54,8 @@ model Event {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   deletedAt    DateTime?
+
+  peserta Peserta[]
 
   program    Program     @relation(fields: [programId], references: [id], onDelete: Cascade)
   JenisEvent JenisEvent? @relation(fields: [jenisEventId], references: [id])
@@ -92,8 +93,7 @@ model Notulensi {
 
 model Peserta {
   id                   String    @id @default(cuid())
-  programId            String?
-  provider             String   @default("google")
+  provider             String    @default("google")
   providerId           String?
   nim                  String?
   name                 String
@@ -108,7 +108,7 @@ model Peserta {
   updatedAt            DateTime  @updatedAt
   deletedAt            DateTime?
 
-  Program Program? @relation(fields: [programId], references: [id], onDelete: Cascade)
+  Event Event[]
 
   @@map("peserta")
 }
