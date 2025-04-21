@@ -65,12 +65,19 @@ export async function logoutUserHandler(
     request: FastifyRequest,
     reply: FastifyReply
 ) {
-    reply.clearCookie("access_token", {
-        path: "/",
-        domain: process.env.DOMAIN || "localhost",
-        httpOnly: true,
-        secure: true,
-    })
+    console.log(request.user.GoogleToken)
+    const token = request.user.GoogleToken
+    if (token) {
+        await fetch('https://accounts.google.com/o/oauth2/revoke?token=' + token?.access_token, {
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + token?.access_token
+            },
+        })
+    }
+
+    reply.clearCookie("google_access_token");
+    reply.clearCookie("access_token");
 
     reply.send({
         data: [],
@@ -135,9 +142,9 @@ export async function getUserByTokenHandler(
                 status: 403,
             })
             return
-        } 
+        }
 
-        
+
         const user = await UserService.GetUserById(request.user.id)
 
         reply.send({

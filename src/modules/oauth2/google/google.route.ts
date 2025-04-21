@@ -16,14 +16,14 @@ export function googleOAuth2Routes(
         googleLoginHandler
     );
 
-    app.post(
-        '/google/logout',
-        {
-            schema: {
-                tags: ['OAuth2'],
-            },
-            preHandler: [app.authenticate],
-        },
-        googleLogoutHandler
-    )
+    // app.post(
+    //     '/google/logout',
+    //     {
+    //         schema: {
+    //             tags: ['OAuth2'],
+    //         },
+    //         preHandler: [app.authenticate],
+    //     },
+    //     googleLogoutHandler
+    // )
 }

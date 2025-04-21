@@ -30,7 +30,8 @@ async function authRoutes(server: FastifyInstance) {
         {
             schema: {
                 tags: ["Auth"],
-            }
+            },
+            preHandler: [server.authenticate]
         },
         logoutUserHandler
     )
