@@ -38,16 +38,16 @@ export async function googleLoginHandler(
         secure: true,
     })
 
-    reply.send({
-        data: userData,
-        message: 'User logged in successfully',
-        status: 200,
-        metadata: {
-            google_token: result
-        }
-    })
+    reply.redirect(`${process.env.FRONTEND_URL}/home`)
 
-    // reply.redirect('http://localhost:3000/dashboard')
+    // reply.send({
+    //     data: userData,
+    //     message: 'User logged in successfully',
+    //     status: 200,
+    //     metadata: {
+    //         google_token: result
+    //     }
+    // })
 }
 
 export async function googleLogoutHandler(

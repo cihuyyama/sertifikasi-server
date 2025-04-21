@@ -25,7 +25,7 @@ async function pesertaRoutes(app: FastifyInstance) {
                         search: { type: "string" },
                         sertifikasi: { type: "string" },
                         status: { type: "string" },
-                        programId: { type: "string" },
+                        eventId: { type: "string" },
                     },
                 },
             },

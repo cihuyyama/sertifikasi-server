@@ -21,6 +21,7 @@ async function notulensiRoutes(server: FastifyInstance) {
                 tags: ["Notulensi"],
                 description: "Upload Notulensi Document",
                 summary: "Upload Notulensi Docs by file id",
+                body: $ref("createNotulensiDocSchema"),
             },
         },
         uploadNotulensiDocHandler
