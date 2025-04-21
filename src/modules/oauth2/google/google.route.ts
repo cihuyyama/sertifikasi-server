@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyPluginOptions, FastifyReply, FastifyRequest } from 'fastify';
-import { googleLoginHandler } from './google.controller';
+import { googleLoginHandler, googleLogoutHandler } from './google.controller';
 
 
 export function googleOAuth2Routes(
@@ -15,4 +15,15 @@ export function googleOAuth2Routes(
         },
         googleLoginHandler
     );
+
+    app.post(
+        '/google/logout',
+        {
+            schema: {
+                tags: ['OAuth2'],
+            },
+            preHandler: [app.authenticate],
+        },
+        googleLogoutHandler
+    )
 }

@@ -78,6 +78,10 @@ class PesertaRepository {
             where: {
                 id,
             },
+            include: {
+                Program: true,
+                sertifikat: true,
+            }
         })
 
         return peserta;

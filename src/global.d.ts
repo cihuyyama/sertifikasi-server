@@ -11,12 +11,20 @@ declare module 'fastify' {
     }
 }
 
+type GoogleToken = {
+    access_token: string
+    expires_in: number
+    scope: string
+    token_type: string
+    expires_at: number
+}
+
 export type UserPayload = {
     id: string
     username: string
     email?: string
     role: Role
-    google_access_token?: string
+    GoogleToken?: GoogleToken
     picture?: string
 }
 
