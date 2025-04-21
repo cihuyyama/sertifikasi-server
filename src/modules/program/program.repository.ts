@@ -31,6 +31,14 @@ class ProgramRepository {
             where: {
                 id,
             },
+            include: {
+                Event: true,
+                Notulensi: {
+                    include: {
+                        File: true,
+                    }
+                },
+            },
         })
 
         return program;

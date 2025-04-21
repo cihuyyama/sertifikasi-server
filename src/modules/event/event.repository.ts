@@ -39,6 +39,16 @@ class EventRepository {
         return event;
     }
 
+    static async FindByProgramId(programId: string) {
+        const event = await db.event.findMany({
+            where: {
+                programId,
+            },
+        })
+
+        return event;
+    }
+
     static async Update(id: string, data: CreateEvent) {
         const event = await db.event.update({
             where: {
