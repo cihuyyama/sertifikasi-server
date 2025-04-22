@@ -6,11 +6,13 @@ class PesertaRepository {
         const peserta = await db.peserta.create({
             data: {
                 ...data,
-                Event: {
-                    connect: {
-                        id: data.eventId,
+                ...(data.eventId ? {
+                    Event: {
+                        connect: {
+                            id: data.eventId,
+                        }
                     }
-                },
+                } : {}),
             },
         })
 
@@ -24,19 +26,23 @@ class PesertaRepository {
             },
             update: {
                 ...data,
-                Event: {
-                    connect: {
-                        id: data.eventId,
+                ...(data.eventId ? {
+                    Event: {
+                        connect: {
+                            id: data.eventId,
+                        }
                     }
-                }
+                } : {}),
             },
             create: {
                 ...data,
-                Event: {
-                    connect: {
-                        id: data.eventId,
+                ...(data.eventId ? {
+                    Event: {
+                        connect: {
+                            id: data.eventId,
+                        }
                     }
-                }
+                } : {}),
             },
         })
 
