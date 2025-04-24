@@ -14,7 +14,7 @@ export function registerGoogleOAuth2Provider(app: FastifyInstance) {
             auth: oauth2.GOOGLE_CONFIGURATION
         },
         startRedirectPath: '/oauth2/google',
-        callbackUri: `http://localhost:5000/oauth2/google/callback`,
+        callbackUri: `${process.env.BACKEND_URL}/oauth2/google/callback`,
         schema: {
             tags: ['OAuth2'],
             summary: "Login with Google",
