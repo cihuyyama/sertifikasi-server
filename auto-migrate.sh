@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "Running Prisma migrate..."
-npx prisma migrate deploy
+npx prisma db push
 
 echo "Starting application..."
 npm start
