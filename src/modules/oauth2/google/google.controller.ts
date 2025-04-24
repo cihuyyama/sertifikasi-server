@@ -38,7 +38,7 @@ export async function googleLoginHandler(
         secure: true,
     })
 
-    reply.redirect(`${process.env.FRONTEND_URL}/home`)
+    reply.redirect(`${process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : 'http://localhost:3000'}/home`)
 
     // reply.send({
     //     data: userData,
