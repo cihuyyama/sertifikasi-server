@@ -16,7 +16,8 @@ WORKDIR /app
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production --legacy-peer-deps && npm cache clean --force
+COPY auto-migrate.sh ./auto-migrate.sh
+RUN chmod +x ./auto-migrate.sh && npm ci --only=production --legacy-peer-deps && npm cache clean --force
 
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
