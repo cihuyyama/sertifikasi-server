@@ -26,4 +26,4 @@ RUN chown -R appuser:appgroup /app
 USER appuser
 
 EXPOSE 5000
-CMD ["npm", "start"]
+CMD ["./auto-migrate.sh"]
