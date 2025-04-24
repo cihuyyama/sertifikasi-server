@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyPluginOptions, FastifyReply, FastifyRequest } from 'fastify';
-import { googleLoginHandler, googleLogoutHandler } from './google.controller';
+import {  googleLoginHandler } from './google.controller';
 
 
 export function googleOAuth2Routes(

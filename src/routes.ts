@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { programSchemas } from "./modules/program/program.schema";
 import programRoutes from "./modules/program/program.route";
 import { eventSchemas } from "./modules/event/event.schema";
@@ -10,6 +10,7 @@ import { authRoutes, userRoutes } from "./modules/user/user.route";
 import { googleOAuth2Routes } from "./modules/oauth2/google/google.route";
 import { pesertaSchemas } from "./modules/peserta/peserta.schema";
 import pesertaRoutes from "./modules/peserta/peserta.route";
+import mjml2html from "mjml";
 
 export async function serverRoutes(app: FastifyInstance) {
     for (const schema of [

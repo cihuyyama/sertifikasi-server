@@ -1,5 +1,6 @@
 import { JWT } from '@fastify/jwt'
 import { Role } from './utils/types';
+import { Transporter } from 'nodemailer';
 
 declare module 'fastify' {
     interface FastifyRequest {
@@ -8,6 +9,7 @@ declare module 'fastify' {
     export interface FastifyInstance {
         authenticate: any
         GoogleOAuth2: OAuth2Namespace;
+        mailer: FastifyMailer
     }
 }
 
@@ -34,3 +36,8 @@ declare module '@fastify/jwt' {
         peserta: PesertaPayload
     }
 }
+
+export interface FastifyMailerNamedInstance {
+    [namespace: string]: Transporter;
+}
+export type FastifyMailer = FastifyMailerNamedInstance & Transporter;

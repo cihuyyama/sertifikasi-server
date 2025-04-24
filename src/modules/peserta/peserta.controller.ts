@@ -32,6 +32,25 @@ class PesertaController {
         }
     }
 
+    static async createManyPesertaHandler(
+        request: FastifyRequest<{
+            Body: CreatePesertaInput[]
+        }>,
+        reply: FastifyReply
+    ) {
+        try {
+            const peserta = await PesertaService.createManyPeserta(request.body)
+
+            reply.send({
+                data: peserta,
+                message: "Peserta created successfully",
+                status: 201,
+            })
+        } catch (error) {
+            errorFilter(error, reply)
+        }
+    }
+
     static async upsertPesertaHandler(
         request: FastifyRequest<{
             Params: { id: string }

@@ -19,6 +19,23 @@ class PesertaRepository {
         return peserta;
     }
 
+    static async InsertMany(data: CreatePesertaInput[]) {
+        const peserta = await db.peserta.createMany({
+            data: data.map((item) => ({
+                ...item,
+                ...(item.eventId ? {
+                    Event: {
+                        connect: {
+                            id: item.eventId,
+                        }
+                    }
+                } : {}),
+            })),
+        })
+
+        return peserta;
+    }
+
     static async Upsert(id: string, data: CreatePesertaInput) {
         const peserta = await db.peserta.upsert({
             where: {

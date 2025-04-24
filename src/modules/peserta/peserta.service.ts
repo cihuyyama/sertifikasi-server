@@ -8,6 +8,12 @@ class PesertaService {
         return peserta;
     }
 
+    static async createManyPeserta(data: CreatePesertaInput[]) {
+        const peserta = await PesertaRepository.InsertMany(data);
+
+        return peserta;
+    }
+
     static async upsertPeserta(id: string, data: CreatePesertaInput) {
         const peserta = await PesertaRepository.Upsert(id, data);
 

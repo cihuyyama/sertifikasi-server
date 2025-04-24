@@ -14,6 +14,17 @@ async function pesertaRoutes(app: FastifyInstance) {
         PesertaController.createPesertaHandler
     );
 
+    app.post(
+        "/many",
+        {
+            schema: {
+                tags: ["Peserta"],
+                body: $ref("createManyPesertaSchema"),
+            },
+        },
+        PesertaController.createManyPesertaHandler
+    );
+
     app.get(
         "/",
         {
