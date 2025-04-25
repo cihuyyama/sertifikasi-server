@@ -18,7 +18,7 @@ const mailerConfig: MailerConfig = {
     templateFolder: "mjml/templates",
   },
   templateData: {
-    baseCDNUrl: "http://localhost:5000/",
+    baseCDNUrl: process.env.NODE_ENV === 'production' ? `https://${process.env.BACKEND_URL}/` : "http://localhost:5000/",
   },
   transport: {
     auth: {
