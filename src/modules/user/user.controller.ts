@@ -75,8 +75,19 @@ export async function logoutUserHandler(
         })
     }
 
-    reply.clearCookie("google_access_token");
-    reply.clearCookie("access_token");
+    reply.clearCookie("google_access_token", {
+        path: "/",
+        domain: process.env.DOMAIN || "localhost",
+        httpOnly: true,
+        secure: true,
+    });
+    
+    reply.clearCookie("access_token", {
+        path: "/",
+        domain: process.env.DOMAIN || "localhost",
+        httpOnly: true,
+        secure: true,
+    });
 
     reply.send({
         data: [],
