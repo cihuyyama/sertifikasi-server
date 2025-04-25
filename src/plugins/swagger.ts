@@ -13,7 +13,7 @@ export function registerSwaggerProvider(app: FastifyInstance) {
                 description: "Find more info here",
             },
             host: `${process.env.NODE_ENV === 'production' ? process.env.BACKEND_DOMAIN : 'localhost:5000'}`,
-            schemes: ["http", "https"],
+            schemes: [process.env.NODE_ENV === 'production' ? 'https' : 'http'],
             consumes: ["application/json", "multipart/form-data"],
             produces: ["application/json"],
         }
