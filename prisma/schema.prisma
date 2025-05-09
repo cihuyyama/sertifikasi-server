@@ -150,3 +150,23 @@ model File {
   @@index([filename])
   @@index([createdAt])
 }
+
+model Sertifikasi {
+  id        String    @id @default(cuid())
+  name      String
+  code      String    @unique
+
+}
+
+model Vendor {
+  id        String    @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  address   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("vendors")
+}

@@ -10,7 +10,8 @@ import { authRoutes, userRoutes } from "./modules/user/user.route";
 import { googleOAuth2Routes } from "./modules/oauth2/google/google.route";
 import { pesertaSchemas } from "./modules/peserta/peserta.schema";
 import pesertaRoutes from "./modules/peserta/peserta.route";
-import mjml2html from "mjml";
+import { vendorSchemas } from "./modules/vendor/vendor.schema";
+import vendorRoutes from "./modules/vendor/vendor.route";
 
 export async function serverRoutes(app: FastifyInstance) {
     for (const schema of [
@@ -19,6 +20,7 @@ export async function serverRoutes(app: FastifyInstance) {
         ...notulensiSchemas,
         ...userSchemas,
         ...pesertaSchemas,
+        ...vendorSchemas,
     ]) {
         app.addSchema(schema)
     }
@@ -34,4 +36,5 @@ export async function serverRoutes(app: FastifyInstance) {
     app.register(eventRoutes, { prefix: 'api/v1/events' })
     app.register(notulensiRoutes, { prefix: 'api/v1/notulensi' })
     app.register(pesertaRoutes, { prefix: 'api/v1/peserta' })
+    app.register(vendorRoutes, { prefix: 'api/v1/vendors' })
 }
