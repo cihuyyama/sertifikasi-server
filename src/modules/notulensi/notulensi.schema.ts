@@ -3,7 +3,7 @@ import { buildJsonSchemas } from "fastify-zod";
 import { z } from "zod";
 
 const createNotulensiSchema = z.object({
-    programId: z.custom<MultipartValue<string>>(),
+    eventId: z.custom<MultipartValue<string>>(),
     name: z.custom<MultipartValue<string>>(),
     tanggal: z.custom<MultipartValue<string>>(),
     description: z.custom<MultipartValue<string>>().optional(),

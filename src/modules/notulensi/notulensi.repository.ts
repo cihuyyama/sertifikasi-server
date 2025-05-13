@@ -6,7 +6,7 @@ class NotulensiRepository {
     static async Insert(data: CreateNotulensiInput, files: FileEntries[]) {
         const notulensi = await db.notulensi.create({
             data: {
-                programId: data.programId.value,
+                eventId: data.eventId.value,
                 name: data.name.value,
                 description: data.description?.value,
                 tanggal: new Date(data.tanggal.value),
@@ -14,7 +14,7 @@ class NotulensiRepository {
                     createMany: {
                         data: files
                     }
-                }
+                },
             }
         })
 
@@ -80,7 +80,7 @@ class NotulensiRepository {
                 id,
             },
             data: {
-                programId: data.programId.value,
+                eventId: data.eventId.value,
                 name: data.name.value,
                 description: data.description?.value,
                 tanggal: new Date(data.tanggal.value),

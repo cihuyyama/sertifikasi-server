@@ -9,7 +9,7 @@ import { registerJwtPlugin } from "./plugins/jwt";
 import { registerCookiePlugin } from './plugins/cookie';
 import { registerMultipartPlugin } from './plugins/multipart';
 import mailerPlugin, { FastifyMailer } from '@dzangolab/fastify-mailer';
-import { mailerConfig } from './plugins/mailer';
+import { mailerConfig, sendSMTPEmail } from './plugins/mailer';
 
 
 const app = fastify({
@@ -25,6 +25,16 @@ registerGoogleOAuth2Provider(app);
 registerMultipartPlugin(app)
 
 app.register(mailerPlugin, mailerConfig)
+
+app.post('/send-email', async (req, res) => {
+    const mailResponse = await sendSMTPEmail(
+        app,
+        'miqbalalhabib@gmaail.com',
+        'Test Email',
+        
+    )
+})
+    
 
 async function start() {
     serverRoutes(app)

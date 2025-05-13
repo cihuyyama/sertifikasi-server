@@ -72,33 +72,32 @@ class PesertaRepository {
         status?: string,
         eventId?: string,
     ) {
+        const whereClause: any = {};
+
+        if (sertifikasi) {
+            whereClause.sertifikasiTerdaftar = sertifikasi;
+        }
+
+        if (status) {
+            whereClause.status = status;
+        }
+
+        if (eventId) {
+            whereClause.Event = {
+                some: { id: eventId }
+            };
+        }
+
+        if (search) {
+            whereClause.OR = [
+                { name: { contains: search } },
+                { nim: { contains: search } },
+                { email: { contains: search } }
+            ];
+        }
+
         const peserta = await db.peserta.findMany({
-            where: {
-                sertifikasiTerdaftar: sertifikasi,
-                status: status,
-                Event: {
-                    some: {
-                        id: eventId,
-                    }
-                },
-                OR: [
-                    {
-                        name: {
-                            contains: search,
-                        },
-                    },
-                    {
-                        nim: {
-                            contains: search,
-                        },
-                    },
-                    {
-                        email: {
-                            contains: search,
-                        },
-                    },
-                ],
-            },
+            where: whereClause,
             orderBy: {
                 createdAt: "desc",
             },
@@ -106,7 +105,7 @@ class PesertaRepository {
                 Event: true,
                 sertifikat: true,
             },
-        })
+        });
 
         return peserta;
     }

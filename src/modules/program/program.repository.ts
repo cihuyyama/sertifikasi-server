@@ -32,10 +32,9 @@ class ProgramRepository {
                 id,
             },
             include: {
-                Event: true,
-                Notulensi: {
+                Event: {
                     include: {
-                        File: true,
+                        notulensi: true,
                     }
                 },
             },

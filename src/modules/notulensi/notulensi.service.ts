@@ -5,12 +5,13 @@ import { FileEntries } from "../../utils/types";
 import path from "path";
 import fs from "fs";
 import ProgramRepository from "../program/program.repository";
+import EventRepository from "../event/event.repository";
 
 class NotulensiService {
     static async createNotulensi(data: CreateNotulensiInput, files: MultipartFile | MultipartFile[]) {
-        const program = await ProgramRepository.FindById(data.programId.value);
-        if (!program) {
-            throw new Error("Program not found");
+        const event = await EventRepository.FindById(data.eventId.value);
+        if (!event) {
+            throw new Error("Event not found");
         }
 
         const fileEntries: FileEntries[] = [];

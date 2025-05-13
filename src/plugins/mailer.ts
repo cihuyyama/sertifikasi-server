@@ -36,11 +36,11 @@ async function sendSMTPEmail(
   app: FastifyInstance,
   to: string,
   subject: string,
-  file?: Buffer<ArrayBufferLike>,
+  file?: Buffer,
   contentHeader?: string,
   contentText?: string,
   filename?: string,
-) {
+): Promise<any> {
   const { mailer } = app
 
   const html = mjml2html(
@@ -65,31 +65,31 @@ async function sendSMTPEmail(
     </mjml>`,
   );
 
-  mailer.sendMail(
-    {
-      to,
-      subject,
-      html: html.html,
-
-      attachments: file ? 
-      [
-        {
-          filename: filename,
-          content: file,
+  // Convert the callback-based mailer.sendMail to a Promise
+  return new Promise((resolve, reject) => {
+    mailer.sendMail(
+      {
+        to,
+        subject,
+        html: html.html,
+        attachments: file ? 
+        [
+          {
+            filename: filename || 'attachment',  // Provide default filename if none given
+            content: file,
+          }
+        ] : [],
+      },
+      (error: unknown, info: { from: unknown; to: unknown }) => {
+        if (error) {
+          app.log.error(error);
+          reject(error);
+          return;
         }
-      ] : [],
-    },
-    (error: unknown, info: { from: unknown; to: unknown }) => {
-      if (error) {
-        /* eslint-disable-next-line unicorn/consistent-destructuring */
-        app.log.error(error);
-
-        return error
+        resolve(info);
       }
-
-      return info
-    }
-  )
+    );
+  });
 }
 
 export {

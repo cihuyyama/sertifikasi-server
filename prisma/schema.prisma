@@ -25,18 +25,16 @@ model User {
 }
 
 model Program {
-  id          String      @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
   description String?
   status      String?
   startDate   DateTime
   endDate     DateTime
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
   Event       Event[]
-  Notulensi   Notulensi[]
-  Panitia     Panitia[]
 
   @@map("programs")
 }
@@ -45,6 +43,7 @@ model Event {
   id           String    @id @default(cuid())
   programId    String
   jenisEventId String?
+  notulensiId  String?
   name         String
   description  String?
   startDate    DateTime
@@ -55,7 +54,8 @@ model Event {
   updatedAt    DateTime  @updatedAt
   deletedAt    DateTime?
 
-  peserta Peserta[]
+  peserta   Peserta[]
+  notulensi Notulensi[]
 
   program    Program     @relation(fields: [programId], references: [id], onDelete: Cascade)
   JenisEvent JenisEvent? @relation(fields: [jenisEventId], references: [id])
@@ -77,7 +77,7 @@ model JenisEvent {
 
 model Notulensi {
   id          String    @id @default(cuid())
-  programId   String?
+  eventId     String
   name        String
   tanggal     DateTime
   description String?
@@ -85,8 +85,8 @@ model Notulensi {
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
 
-  Program Program? @relation(fields: [programId], references: [id], onDelete: Cascade)
-  File    File[]
+  File  File[]
+  Event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   @@map("notulensi")
 }
@@ -115,7 +115,6 @@ model Peserta {
 
 model Panitia {
   id        String    @id @default(cuid())
-  programId String?
   name      String
   email     String
   phone     String?
@@ -123,8 +122,6 @@ model Panitia {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-
-  Program Program? @relation(fields: [programId], references: [id], onDelete: Cascade)
 
   @@map("panitia")
 }
@@ -152,10 +149,9 @@ model File {
 }
 
 model Sertifikasi {
-  id        String    @id @default(cuid())
-  name      String
-  code      String    @unique
-
+  id   String @id @default(cuid())
+  name String
+  code String @unique
 }
 
 model Vendor {
@@ -169,4 +165,41 @@ model Vendor {
   deletedAt DateTime?
 
   @@map("vendors")
+}
+
+model Asset {
+  id           String    @id @default(cuid())
+  vendorId     String?
+  name         String
+  description  String?
+  checkInDate  DateTime?
+  checkOutDate DateTime?
+  expiredAt    DateTime?
+  condition    String?
+  location     String?
+  price        Int?
+  satuan       String?
+  qty          Int?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("assets")
+}
+
+model AssetHistory {
+  id           String    @id @default(cuid())
+  assetName    String?
+  status       String?
+  checkInDate  DateTime?
+  checkOutDate DateTime?
+  distributor  String?
+  qty          Int?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("asset_histories")
 }
