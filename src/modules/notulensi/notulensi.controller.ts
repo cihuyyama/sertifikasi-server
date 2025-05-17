@@ -128,7 +128,7 @@ export async function updateNotulensiHandler(
     try {
         const { id } = request.params
 
-        const notulensi = await NotulensiService.updateNotulensi(id, request.body)
+        const notulensi = await NotulensiService.updateNotulensi(id, request.body, request.body.files)
 
         reply.send({
             data: notulensi,

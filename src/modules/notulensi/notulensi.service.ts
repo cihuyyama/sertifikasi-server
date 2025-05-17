@@ -130,13 +130,43 @@ class NotulensiService {
         return notulensi;
     }
 
-    static async updateNotulensi(id: string, data: CreateNotulensiInput) {
-        const notulensi = await NotulensiRepository.Update(id, data);
+    static async updateNotulensi(id: string, data: CreateNotulensiInput, files?: MultipartFile | MultipartFile[]) {
+        const notulensi = await NotulensiRepository.FindById(id);
         if (!notulensi) {
             throw new Error("Notulensi not found");
         }
 
-        return notulensi;
+        const fileEntries: FileEntries[] = [];
+        if (files) {
+            const filesArray = Array.isArray(files) ? files : [files];
+
+            for (const file of filesArray) {
+                const uploadDir = path.join(__dirname, `../../../public/notulensi`);
+                if (!fs.existsSync(uploadDir)) {
+                    fs.mkdirSync(uploadDir, { recursive: true });
+                }
+
+                const clearFileName = file.filename.replace(/[^a-z0-9.]/gi, '_').toLowerCase();
+                const uniqueFilename = `${Date.now()}-${clearFileName}`;
+                const filePath = path.join(uploadDir, uniqueFilename);
+
+                await fs.promises.writeFile(filePath, await file.toBuffer());
+
+                fileEntries.push({
+                    filename: uniqueFilename,
+                    originalName: file.filename,
+                    path: filePath,
+                    mimetype: file.mimetype,
+                    size: file.file.bytesRead,
+                    extension: path.extname(file.filename).toLowerCase(),
+                });
+            }
+
+        }
+
+        const updatedNotulensi = await NotulensiRepository.Update(id, data, fileEntries);
+
+        return updatedNotulensi;
     }
 
     static async deleteNotulensi(id: string) {

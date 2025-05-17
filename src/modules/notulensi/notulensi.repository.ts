@@ -74,19 +74,28 @@ class NotulensiRepository {
         return doc
     }
 
-    static async Update(id: string, data: CreateNotulensiInput) {
+    static async Update(id: string, data: CreateNotulensiInput, files?: FileEntries[]) {
+        const updateData: any = {
+            eventId: data.eventId.value,
+            name: data.name.value,
+            description: data.description?.value,
+            tanggal: new Date(data.tanggal.value),
+        };
+    
+        if (files && files.length > 0) {
+            updateData.File = {
+                deleteMany: {},
+                createMany: {
+                    data: files
+                }
+            };
+        }
+    
         const notulensi = await db.notulensi.update({
-            where: {
-                id,
-            },
-            data: {
-                eventId: data.eventId.value,
-                name: data.name.value,
-                description: data.description?.value,
-                tanggal: new Date(data.tanggal.value),
-            },
-        })
-
+            where: { id },
+            data: updateData
+        });
+    
         return notulensi;
     }
 
