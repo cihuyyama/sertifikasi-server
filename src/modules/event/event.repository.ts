@@ -31,7 +31,7 @@ class EventRepository {
             throw new Error("Event not found");
         }
 
-        const currentPesertaIds = currentEvent.peserta.map(p => p.id);
+        const currentPesertaIds = currentEvent.peserta.map((p: { id: string }) => p.id);
         const newPesertaIds = pesertaIds.filter(id => !currentPesertaIds.includes(id));
 
         if (newPesertaIds.length === 0) {
@@ -117,7 +117,7 @@ class EventRepository {
             throw new Error("Event not found");
         }
 
-        const connectedPesertaIds = eventWithPeserta.peserta.map(p => p.id);
+        const connectedPesertaIds = eventWithPeserta.peserta.map((p: { id: string }) => p.id);
 
         const unconnectedPeserta = await db.peserta.findMany({
             where: {
