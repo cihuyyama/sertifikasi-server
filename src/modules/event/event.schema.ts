@@ -23,11 +23,22 @@ const createEventSchema = z.object({
     tempat: z.string().optional(),
 })
 
+const connectPesertaSchema = z.object({
+    id: z.string({
+        required_error: "Event ID is required",
+    }),
+    pesertaIds: z.array(z.string(), {
+        required_error: "Peserta IDs are required",
+    }),
+})
+
 export type CreateEvent = z.infer<typeof createEventSchema>;
+export type CreateConnectPeserta = z.infer<typeof connectPesertaSchema>;
 
 export const { schemas: eventSchemas, $ref } = buildJsonSchemas(
     {
         createEventSchema,
+        connectPesertaSchema,
     },
     {
         $id: "eventSchemas"

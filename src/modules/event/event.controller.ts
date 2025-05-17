@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import { CreateEvent } from "./event.schema"
+import { CreateConnectPeserta, CreateEvent } from "./event.schema"
 import EventService from "./event.service"
 import { errorFilter } from "../../middlewares/error-handling"
 
@@ -16,6 +16,49 @@ export async function createEventHandler(
             data: event,
             message: "Event created successfully",
             status: 201,
+        })
+    } catch (error) {
+        errorFilter(error, reply)
+    }
+}
+
+export async function connectManyPesertaHandler(
+    request: FastifyRequest<{
+        Body: CreateConnectPeserta
+    }>,
+    reply: FastifyReply
+) {
+    try {
+        const event = await EventService.connectManyPeserta(request.body)
+
+        reply.send({
+            data: event,
+            message: "Peserta connected successfully",
+            status: 200,
+        })
+    } catch (error) {
+        errorFilter(error, reply)
+    }
+}
+
+export async function disconnectPesertaHandler(
+    request: FastifyRequest<{
+        Body: {
+            id: string
+            pesertaId: string
+        }
+    }>,
+    reply: FastifyReply
+) {
+    try {
+        const { id, pesertaId } = request.body
+
+        const event = await EventService.disconnectPeserta(id, pesertaId)
+
+        reply.send({
+            data: event,
+            message: "Peserta disconnected successfully",
+            status: 200,
         })
     } catch (error) {
         errorFilter(error, reply)
@@ -61,6 +104,29 @@ export async function getEventByIdHandler(
         reply.send({
             data: event,
             message: "Event fetched successfully",
+            status: 200,
+        })
+    } catch (error) {
+        errorFilter(error, reply)
+    }
+}
+
+export async function getUnconnectedPesertaHandler(
+    request: FastifyRequest<{
+        Params: {
+            id: string
+        }
+    }>,
+    reply: FastifyReply
+) {
+    try {
+        const { id } = request.params
+
+        const event = await EventService.getUnconnectedPeserta(id)
+
+        reply.send({
+            data: event,
+            message: "Unconnected peserta fetched successfully",
             status: 200,
         })
     } catch (error) {

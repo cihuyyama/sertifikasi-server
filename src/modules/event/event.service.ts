@@ -1,6 +1,7 @@
+import { CreateManyPesertaInput } from "../peserta/peserta.schema";
 import ProgramRepository from "../program/program.repository";
 import EventRepository from "./event.repository";
-import { CreateEvent } from "./event.schema";
+import { CreateConnectPeserta, CreateEvent } from "./event.schema";
 
 class EventService {
     static async createEvent(data: CreateEvent) {
@@ -14,6 +15,24 @@ class EventService {
         return event;
     }
 
+    static async connectManyPeserta(data: CreateConnectPeserta) {
+        const event = await EventRepository.ConnectManyPeserta(data)
+        if (!event) {
+            throw new Error("Event not found")
+        }
+
+        return event;
+    }
+
+    static async disconnectPeserta(id: string, pesertaId: string) {
+        const event = await EventRepository.DisconnectPeserta(id, pesertaId)
+        if (!event) {
+            throw new Error("Event not found")
+        }
+
+        return event;
+    }
+
     static async getAllEvents(name?: string) {
         const events = await EventRepository.FindAll(name)
         return events;
@@ -21,6 +40,15 @@ class EventService {
 
     static async getEventById(id: string) {
         const event = await EventRepository.FindById(id)
+        if (!event) {
+            throw new Error("Event not found")
+        }
+
+        return event;
+    }
+
+    static async getUnconnectedPeserta(eventId: string) {
+        const event = await EventRepository.FindUnconnectedPeserta(eventId)
         if (!event) {
             throw new Error("Event not found")
         }
