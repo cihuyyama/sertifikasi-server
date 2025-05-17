@@ -12,13 +12,13 @@ class PesertaController {
         reply: FastifyReply
     ) {
         try {
-            if (request.user.role !== Role.PESERTA) {
-                reply.status(403).send({
-                    message: "Forbidden",
-                    status: 403,
-                });
-                return;
-            }
+            // if (request.user.role !== Role.PESERTA) {
+            //     reply.status(403).send({
+            //         message: "Forbidden",
+            //         status: 403,
+            //     });
+            //     return;
+            // }
 
             const peserta = await PesertaService.createPeserta(request.body)
 

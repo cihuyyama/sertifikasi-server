@@ -1,38 +1,48 @@
+import { connect } from "http2";
 import { db } from "../../config/prisma";
 import { CreatePesertaInput } from "./peserta.schema";
 
 class PesertaRepository {
     static async Insert(data: CreatePesertaInput) {
+        const { eventId, ...pesertaData } = data;
+
         const peserta = await db.peserta.create({
             data: {
-                ...data,
-                ...(data.eventId ? {
+                ...pesertaData,
+                ...(eventId ? {
                     Event: {
                         connect: {
-                            id: data.eventId,
+                            id: eventId,
                         }
                     }
                 } : {}),
             },
-        })
+        });
 
         return peserta;
     }
 
     static async InsertMany(data: CreatePesertaInput[]) {
-        const peserta = await db.peserta.createMany({
-            data: data.map((item) => ({
-                ...item,
-                ...(item.eventId ? {
-                    Event: {
-                        connect: {
-                            id: item.eventId,
-                        }
-                    }
-                } : {}),
-            })),
-        })
 
+        const peserta = await db.$transaction(
+            data.map(item => {
+                const { eventId, ...pesertaData } = item;
+                
+                return db.peserta.create({
+                    data: {
+                        ...pesertaData,
+                        ...(eventId ? {
+                            Event: {
+                                connect: {
+                                    id: eventId,
+                                }
+                            }
+                        } : {}),
+                    }
+                });
+            })
+        );
+        
         return peserta;
     }
 
