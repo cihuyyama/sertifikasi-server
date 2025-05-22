@@ -67,6 +67,7 @@ export async function getAllEmployeeHandler(
             search?: string
             sertifikasi?: string
             status?: string
+            role?: string
         }
     }>,
     reply: FastifyReply
@@ -76,6 +77,7 @@ export async function getAllEmployeeHandler(
             request.query.search,
             request.query.sertifikasi,
             request.query.status,
+            request.query.role
         )
 
         reply.send({

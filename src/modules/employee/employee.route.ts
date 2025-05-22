@@ -38,6 +38,7 @@ async function employeeRoutes(app: FastifyInstance) {
                         search: { type: "string" },
                         sertifikasi: { type: "string" },
                         status: { type: "string" },
+                        role: { type: "string" },
                     },
                 },
             },

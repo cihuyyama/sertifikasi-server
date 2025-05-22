@@ -24,11 +24,13 @@ class EmployeeService {
         search?: string,
         sertifikasi?: string,
         status?: string,
+        role?: string,
     ) {
         const employee = await EmployeeRepository.FindAll(
             search,
             sertifikasi,
             status,
+            role,
         );
 
         return employee;
