@@ -14,6 +14,8 @@ import { vendorSchemas } from "./modules/vendor/vendor.schema";
 import vendorRoutes from "./modules/vendor/vendor.route";
 import { employeeSchemas } from "./modules/employee/employee.schema";
 import employeeRoutes from "./modules/employee/employee.route";
+import { panitiaSchemas } from "./modules/panitia/panitia.schema";
+import panitiaRoutes from "./modules/panitia/panitia.route";
 
 export async function serverRoutes(app: FastifyInstance) {
     for (const schema of [
@@ -24,6 +26,7 @@ export async function serverRoutes(app: FastifyInstance) {
         ...pesertaSchemas,
         ...vendorSchemas,
         ...employeeSchemas,
+        ...panitiaSchemas,
     ]) {
         app.addSchema(schema)
     }
@@ -41,4 +44,5 @@ export async function serverRoutes(app: FastifyInstance) {
     app.register(pesertaRoutes, { prefix: 'api/v1/peserta' })
     app.register(vendorRoutes, { prefix: 'api/v1/vendors' })
     app.register(employeeRoutes, { prefix: 'api/v1/employees' })
+    app.register(panitiaRoutes, { prefix: 'api/v1/panitia' })
 }
