@@ -59,6 +59,7 @@ model Event {
 
   program    Program     @relation(fields: [programId], references: [id], onDelete: Cascade)
   JenisEvent JenisEvent? @relation(fields: [jenisEventId], references: [id])
+  Panitia    Panitia[]
 
   @@map("events")
 }
@@ -86,7 +87,7 @@ model Notulensi {
   deletedAt   DateTime?
 
   File  File[]
-  Event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  Event Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   @@map("notulensi")
 }
@@ -113,15 +114,53 @@ model Peserta {
   @@map("peserta")
 }
 
+model Employee {
+  id            String       @id @default(cuid())
+  sertifikasiId String?
+  name          String
+  NIP           String?
+  email         String
+  phone         String?
+  NPWP          String?
+  namaBank      String?      @map("nama_bank")
+  noRek         String?      @map("no_rek")
+  status        String?
+  notifikasi    String?
+  jabatan       String?
+  unit          String?
+  role          EmployeeRole @default(Staff)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sertifikasi Sertifikasi? @relation(fields: [sertifikasiId], references: [id])
+
+  staff Panitia[] @relation("StaffPanitia")
+  PIC   Panitia[]
+
+  @@map("employees")
+}
+
+enum EmployeeRole {
+  Trainer
+  Staff
+  Assessor
+  PJ
+
+  @@map("employee_roles")
+}
+
 model Panitia {
-  id        String    @id @default(cuid())
-  name      String
-  email     String
-  phone     String?
-  status    String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  id         String   @id @default(cuid())
+  eventId    String
+  employeeId String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  staff Employee[] @relation("StaffPanitia")
+
+  event Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  PIC   Employee? @relation(fields: [employeeId], references: [id])
 
   @@map("panitia")
 }
@@ -149,9 +188,10 @@ model File {
 }
 
 model Sertifikasi {
-  id   String @id @default(cuid())
-  name String
-  code String @unique
+  id       String     @id @default(cuid())
+  name     String
+  code     String     @unique
+  Employee Employee[]
 }
 
 model Vendor {
