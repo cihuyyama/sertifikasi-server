@@ -4,7 +4,7 @@ import { CreatePesertaInput } from "./peserta.schema";
 
 class PesertaRepository {
     static async Insert(data: CreatePesertaInput) {
-        const { eventId, ...pesertaData } = data;
+        const { eventId, sertifikasiTerdaftarId, ...pesertaData } = data;
 
         const peserta = await db.peserta.create({
             data: {
@@ -13,6 +13,13 @@ class PesertaRepository {
                     Event: {
                         connect: {
                             id: eventId,
+                        }
+                    }
+                } : {}),
+                ...(sertifikasiTerdaftarId ? {
+                    sertifikasiTerdaftar: {
+                        connect: {
+                            id: sertifikasiTerdaftarId,
                         }
                     }
                 } : {}),
@@ -26,7 +33,7 @@ class PesertaRepository {
 
         const peserta = await db.$transaction(
             data.map(item => {
-                const { eventId, ...pesertaData } = item;
+                const { eventId, sertifikasiTerdaftarId, ...pesertaData } = item;
                 
                 return db.peserta.create({
                     data: {
@@ -35,6 +42,13 @@ class PesertaRepository {
                             Event: {
                                 connect: {
                                     id: eventId,
+                                }
+                            }
+                        } : {}),
+                        ...(sertifikasiTerdaftarId ? {
+                            sertifikasiTerdaftar: {
+                                connect: {
+                                    id: sertifikasiTerdaftarId,
                                 }
                             }
                         } : {}),
@@ -60,6 +74,13 @@ class PesertaRepository {
                         }
                     }
                 } : {}),
+                ...(data.sertifikasiTerdaftarId ? {
+                    sertifikasiTerdaftar: {
+                        connect: {
+                            id: data.sertifikasiTerdaftarId,
+                        }
+                    }
+                } : {}),
             },
             create: {
                 ...data,
@@ -67,6 +88,13 @@ class PesertaRepository {
                     Event: {
                         connect: {
                             id: data.eventId,
+                        }
+                    }
+                } : {}),
+                ...(data.sertifikasiTerdaftarId ? {
+                    sertifikasiTerdaftar: {
+                        connect: {
+                            id: data.sertifikasiTerdaftarId,
                         }
                     }
                 } : {}),
@@ -114,6 +142,7 @@ class PesertaRepository {
             include: {
                 Event: true,
                 sertifikat: true,
+                sertifikasiTerdaftar: true,
             },
         });
 
@@ -138,6 +167,7 @@ class PesertaRepository {
             include: {
                 Event: true,
                 sertifikat: true,
+                sertifikasiTerdaftar: true,
             }
         })
 

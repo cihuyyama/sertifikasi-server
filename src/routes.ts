@@ -16,6 +16,8 @@ import { employeeSchemas } from "./modules/employee/employee.schema";
 import employeeRoutes from "./modules/employee/employee.route";
 import { panitiaSchemas } from "./modules/panitia/panitia.schema";
 import panitiaRoutes from "./modules/panitia/panitia.route";
+import { sertifikasiSchemas } from "./modules/sertifikasi/sertifikasi.scheme";
+import sertifikasiRoutes from "./modules/sertifikasi/sertifikasi.route";
 
 export async function serverRoutes(app: FastifyInstance) {
     for (const schema of [
@@ -27,6 +29,7 @@ export async function serverRoutes(app: FastifyInstance) {
         ...vendorSchemas,
         ...employeeSchemas,
         ...panitiaSchemas,
+        ...sertifikasiSchemas,
     ]) {
         app.addSchema(schema)
     }
@@ -45,4 +48,5 @@ export async function serverRoutes(app: FastifyInstance) {
     app.register(vendorRoutes, { prefix: 'api/v1/vendors' })
     app.register(employeeRoutes, { prefix: 'api/v1/employees' })
     app.register(panitiaRoutes, { prefix: 'api/v1/panitia' })
+    app.register(sertifikasiRoutes, { prefix: 'api/v1/sertifikasi' })
 }

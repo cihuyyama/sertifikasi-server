@@ -93,23 +93,23 @@ model Notulensi {
 }
 
 model Peserta {
-  id                   String    @id @default(cuid())
-  provider             String    @default("google")
-  providerId           String?
-  nim                  String?
-  name                 String
-  email                String    @unique
-  phone                String?
-  sertifikasiTerdaftar String?   @map("sertifikasi_terdaftar")
-  status               String?
-  balance              Int?      @default(0)
-  sertifikat           File?
-  picture              String?
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-  deletedAt            DateTime?
+  id         String    @id @default(cuid())
+  provider   String    @default("google")
+  providerId String?
+  nim        String?
+  name       String
+  email      String    @unique
+  phone      String?
+  status     String?
+  balance    Int?      @default(0)
+  sertifikat File?
+  picture    String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
 
-  Event Event[]
+  sertifikasiTerdaftar Sertifikasi[]
+  Event                Event[]
 
   @@map("peserta")
 }
@@ -192,6 +192,7 @@ model Sertifikasi {
   name     String
   code     String     @unique
   Employee Employee[]
+  Peserta  Peserta[]
 }
 
 model Vendor {

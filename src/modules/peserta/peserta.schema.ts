@@ -15,7 +15,7 @@ const createPesertaSchema = z.object({
     eventId: z.string().optional(),
     status: z.string().optional(),
     balance: z.number().optional(),
-    sertifikasiTerdaftar: z.string().optional(),
+    sertifikasiTerdaftarId: z.string().optional(),
     picture: z.string().optional(),
     providerId: z.string().optional(),
 })
@@ -35,7 +35,7 @@ const createManyPesertaSchema = z.array(
         eventId: z.string().optional(),
         status: z.string().optional(),
         balance: z.number().optional(),
-        sertifikasiTerdaftar: z.string().optional(),
+        sertifikasiTerdaftarId: z.string().optional(),
         picture: z.string().optional(),
         providerId: z.string().optional(),
     })
