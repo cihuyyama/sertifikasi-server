@@ -9,7 +9,7 @@ class EmployeeRepository {
             data: {
                 ...employeeData,
                 ...(sertifikasiId ? {
-                    Sertifikasi: {
+                    sertifikasi: {
                         connect: {
                             id: sertifikasiId,
                         }
@@ -31,7 +31,7 @@ class EmployeeRepository {
                     data: {
                         ...employeeData,
                         ...(sertifikasiId ? {
-                            Sertifikasi: {
+                            sertifikasi: {
                                 connect: {
                                     id: sertifikasiId,
                                 }
@@ -46,26 +46,28 @@ class EmployeeRepository {
     }
 
     static async Upsert(id: string, data: CreateEmployeeInput) {
+        const { sertifikasiId, ...employeeData } = data;
+
         const employee = await db.employee.upsert({
             where: {
                 id,
             },
             update: {
-                ...data,
-                ...(data.sertifikasiId ? {
-                    Sertifikasi: {
+                ...employeeData,
+                ...(sertifikasiId ? {
+                    sertifikasi: {
                         connect: {
-                            id: data.sertifikasiId,
+                            id: sertifikasiId,
                         }
                     }
                 } : {}),
             },
             create: {
-                ...data,
-                ...(data.sertifikasiId ? {
-                    Sertifikasi: {
+                ...employeeData,
+                ...(sertifikasiId ? {
+                    sertifikasi: {
                         connect: {
-                            id: data.sertifikasiId,
+                            id: sertifikasiId,
                         }
                     }
                 } : {}),
@@ -125,16 +127,18 @@ class EmployeeRepository {
     }
 
     static async Update(id: string, data: CreateEmployeeInput) {
+        const { sertifikasiId, ...employeeData } = data;
+        
         const employee = await db.employee.update({
             where: {
                 id,
             },
             data: {
-                ...data,
-                ...(data.sertifikasiId ? {
-                    Sertifikasi: {
+                ...employeeData,
+                ...(sertifikasiId ? {
+                    sertifikasi: {
                         connect: {
-                            id: data.sertifikasiId,
+                            id: sertifikasiId,
                         }
                     }
                 } : {}),
