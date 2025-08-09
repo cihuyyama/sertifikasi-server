@@ -30,34 +30,49 @@ class PesertaRepository {
     }
 
     static async InsertMany(data: CreatePesertaInput[]) {
-
-        const peserta = await db.$transaction(
-            data.map(item => {
+        const results = await Promise.all(
+            data.map(async (item) => {
                 const { eventId, sertifikasiTerdaftarId, ...pesertaData } = item;
-                
-                return db.peserta.create({
-                    data: {
-                        ...pesertaData,
-                        ...(eventId ? {
-                            Event: {
-                                connect: {
-                                    id: eventId,
-                                }
-                            }
-                        } : {}),
-                        ...(sertifikasiTerdaftarId ? {
-                            sertifikasiTerdaftar: {
-                                connect: {
-                                    id: sertifikasiTerdaftarId,
-                                }
-                            }
-                        } : {}),
-                    }
-                });
+
+                const connectData = {
+                    ...(eventId ? {
+                        Event: {
+                            connect: {
+                                id: eventId,
+                            },
+                        },
+                    } : {}),
+                    ...(sertifikasiTerdaftarId ? {
+                        sertifikasiTerdaftar: {
+                            connect: {
+                                id: sertifikasiTerdaftarId,
+                            },
+                        },
+                    } : {}),
+                };
+
+                try {
+                    return await db.peserta.upsert({
+                        where: {
+                            email: item.email,
+                        },
+                        update: {
+                            ...pesertaData,
+                            ...connectData,
+                        },
+                        create: {
+                            ...pesertaData,
+                            ...connectData,
+                        },
+                    });
+                } catch (error) {
+                    console.error(`Error upserting participant with email ${item.email}:`, error);
+                    throw error;
+                }
             })
         );
-        
-        return peserta;
+
+        return results;
     }
 
     static async Upsert(id: string, data: CreatePesertaInput) {

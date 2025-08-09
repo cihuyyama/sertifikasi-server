@@ -44,7 +44,7 @@ export async function loginUserHandler(
 
         reply.setCookie("access_token", token, {
             path: "/",
-            domain: process.env.DOMAIN || "localhost",
+            domain: process.env.DOMAIN,
             httpOnly: true,
             secure: true,
         })
@@ -77,7 +77,7 @@ export async function logoutUserHandler(
 
     reply.clearCookie("google_access_token", {
         path: "/",
-        domain: process.env.DOMAIN || "localhost",
+        domain: process.env.DOMAIN,
         httpOnly: true,
         secure: true,
     });
