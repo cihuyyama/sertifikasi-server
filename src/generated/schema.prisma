@@ -1,0 +1,247 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated"
+}
+
+datasource db {
+  provider = "mysql"
+  // url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  salt      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Program {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  status      String?
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  Event       Event[]
+
+  @@map("programs")
+}
+
+model Event {
+  id           String    @id @default(cuid())
+  programId    String
+  jenisEventId String?
+  notulensiId  String?
+  name         String
+  description  String?
+  startDate    DateTime
+  endDate      DateTime
+  harga        Int?
+  tempat       String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  peserta   Peserta[]
+  notulensi Notulensi[]
+
+  program    Program     @relation(fields: [programId], references: [id], onDelete: Cascade)
+  JenisEvent JenisEvent? @relation(fields: [jenisEventId], references: [id])
+  Panitia    Panitia[]
+
+  @@map("events")
+}
+
+model JenisEvent {
+  id        String    @id @default(cuid())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  Event Event[]
+
+  @@map("jenis_events")
+}
+
+model Notulensi {
+  id          String    @id @default(cuid())
+  eventId     String
+  name        String
+  tanggal     DateTime
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  File  File[]
+  Event Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@map("notulensi")
+}
+
+model Peserta {
+  id         String    @id @default(cuid())
+  provider   String    @default("google")
+  providerId String?
+  nim        String?
+  name       String
+  email      String    @unique
+  phone      String?
+  status     String?
+  balance    Int?      @default(0)
+  sertifikat File?
+  picture    String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  sertifikasiTerdaftar Sertifikasi[]
+  Event                Event[]
+
+  @@map("peserta")
+}
+
+model Employee {
+  id            String       @id @default(cuid())
+  sertifikasiId String?
+  name          String
+  NIP           String?
+  email         String
+  phone         String?
+  NPWP          String?
+  namaBank      String?      @map("nama_bank")
+  noRek         String?      @map("no_rek")
+  status        String?
+  notifikasi    String?
+  jabatan       String?
+  unit          String?
+  role          EmployeeRole @default(Staff)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sertifikasi Sertifikasi? @relation(fields: [sertifikasiId], references: [id])
+
+  staff Panitia[] @relation("StaffPanitia")
+  PIC   Panitia[]
+
+  @@map("employees")
+}
+
+enum EmployeeRole {
+  Trainer
+  Staff
+  Assessor
+  PJ
+
+  @@map("employee_roles")
+}
+
+model Panitia {
+  id         String   @id @default(cuid())
+  eventId    String
+  employeeId String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  staff Employee[] @relation("StaffPanitia")
+
+  event Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  PIC   Employee? @relation(fields: [employeeId], references: [id])
+
+  @@map("panitia")
+}
+
+model File {
+  id           String    @id @default(cuid())
+  filename     String
+  originalName String
+  path         String
+  mimetype     String
+  size         Int
+  extension    String
+  description  String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  notulensiId String?
+  pesertaId   String?    @unique
+  notulensi   Notulensi? @relation(fields: [notulensiId], references: [id], onDelete: Cascade)
+  Peserta     Peserta?   @relation(fields: [pesertaId], references: [id])
+
+  @@index([filename])
+  @@index([createdAt])
+}
+
+model Sertifikasi {
+  id       String     @id @default(cuid())
+  name     String
+  code     String     @unique
+  Employee Employee[]
+  Peserta  Peserta[]
+}
+
+model Vendor {
+  id        String    @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  address   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("vendors")
+}
+
+model Asset {
+  id           String    @id @default(cuid())
+  vendorId     String?
+  name         String
+  description  String?
+  checkInDate  DateTime?
+  checkOutDate DateTime?
+  expiredAt    DateTime?
+  condition    String?
+  location     String?
+  price        Int?
+  satuan       String?
+  qty          Int?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("assets")
+}
+
+model AssetHistory {
+  id           String    @id @default(cuid())
+  assetName    String?
+  status       String?
+  checkInDate  DateTime?
+  checkOutDate DateTime?
+  distributor  String?
+  qty          Int?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("asset_histories")
+}
