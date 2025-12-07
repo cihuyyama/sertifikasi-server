@@ -1,9 +1,10 @@
 import "dotenv/config";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "../generated/prisma";
 
 declare global {
-    var prisma: PrismaClient | undefined;
+  var prisma: PrismaClient | undefined;
 };
 
 const adapter = new PrismaMariaDb({

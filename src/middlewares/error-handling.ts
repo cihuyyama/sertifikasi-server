@@ -1,5 +1,5 @@
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { ResponseError } from "../errors/response-error";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { FastifyReply } from "fastify";
 import { ZodError } from "zod";
 

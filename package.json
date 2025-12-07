@@ -6,9 +6,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsnd --respawn --transpile-only --exit-child src/index.ts",
     "build": "tsc",
-    "prisma:generate": "prisma generate --config=prisma/config.ts",
-    "prisma:migrate": "prisma migrate dev --config=prisma/config.ts",
-    "prisma:studio": "prisma studio --config=prisma/config.ts",
     "start": "node dist/index.js"
   },
   "keywords": [],
@@ -26,6 +23,7 @@
     "@fastify/swagger-ui": "^5.2.2",
     "@prisma/adapter-mariadb": "^7.1.0",
     "@prisma/client": "6.3.0",
+    "prisma": "6.3.0",
     "dotenv": "^16.5.0",
     "fastify": "^5.3.2",
     "fastify-zod": "^1.4.0",
@@ -40,7 +38,6 @@
   "devDependencies": {
     "@types/mjml": "^4.7.4",
     "@types/node": "^22.14.1",
-    "prisma": "6.3.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   }
