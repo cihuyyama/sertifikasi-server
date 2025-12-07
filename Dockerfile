@@ -22,6 +22,7 @@ RUN chmod +x ./auto-migrate.sh && npm ci --only=production --legacy-peer-deps &&
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
 COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
 
 RUN chown -R appuser:appgroup /app
 USER appuser
